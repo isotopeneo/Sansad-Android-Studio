@@ -122,6 +122,10 @@ public class MainActivity extends Activity
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Method to show a search Dialog. Called only in the
+     * Bills Parliament fragment
+     */
     private void showSearchDialog() {
         SearchDialog.newInstance().show(getFragmentManager().beginTransaction(), "searchDialog");
     }
