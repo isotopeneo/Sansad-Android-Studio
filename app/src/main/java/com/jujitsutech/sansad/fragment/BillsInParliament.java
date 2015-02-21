@@ -24,20 +24,21 @@ public class BillsInParliament extends Fragment implements
 	private View view;
 	ListView billsList;
 	private final int LOADER_ID = 100;
+    private List<ParliamentBills> data;
 
 	public static BillsInParliament newInstance() {
-		BillsInParliament fragment = new BillsInParliament();
-		return fragment;
+		return new BillsInParliament();
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+        setRetainInstance(true);
 		view = inflater.inflate(R.layout.bills_details, container, false);
 		return view;
 	}
 
-	public void init(List<ParliamentBills> data) {
+    public void init(List<ParliamentBills> data) {
 		billsList = (ListView) view.findViewById(R.id.lv_bills);
 		billsList.setAdapter(new BillsAdapter(getActivity(), data));
 	}
@@ -46,11 +47,15 @@ public class BillsInParliament extends Fragment implements
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		((MainActivity) activity).onSectionAttached(2);
-		inititateLoader();
+        initiateLoader();
 	}
 
-	public void inititateLoader() {
-		getLoaderManager().initLoader(LOADER_ID, null, this).forceLoad();
+	public void initiateLoader() {
+        if (null == data) {
+            getLoaderManager().initLoader(LOADER_ID, null, this).forceLoad();
+        } else {
+            init(data);
+        }
 		/*
 		if (application.isDeviceConnectedToNetwork()) {
 			showProgressBar("Fetching results for " + searchEditText.getText().toString());
@@ -70,6 +75,7 @@ public class BillsInParliament extends Fragment implements
 	@Override
 	public void onLoadFinished(Loader<List<ParliamentBills>> arg0,
 			List<ParliamentBills> data) {
+        this.data = data;
 		getLoaderManager().destroyLoader(LOADER_ID);
 		init(data);
 	}
