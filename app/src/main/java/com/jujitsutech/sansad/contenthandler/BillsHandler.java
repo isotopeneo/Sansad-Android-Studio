@@ -1,5 +1,7 @@
 package com.jujitsutech.sansad.contenthandler;
 
+import android.os.Bundle;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +10,7 @@ import org.json.JSONObject;
 
 import com.jujitsutech.sansad.bean.ParliamentBills;
 import com.jujitsutech.sansad.util.LoggerClass;
+import com.jujitsutech.sansad.util.Singleton;
 
 public class BillsHandler {
 
@@ -26,12 +29,17 @@ public class BillsHandler {
 	private static final String INTRODUCED_BY = "introduced_by";
 	private static final String SUMMARY = "summary";
 	private static final String URL = "url";
+    private static final String COUNT = "count";
+    private static final String PAGE = "page";
 	
 	public List<ParliamentBills> parseContent(String input) {
 		LoggerClass.log(" json is " + input);
 		if (!(input.equals(""))) {
 			try {
 				JSONObject json = new JSONObject(input);
+                Singleton.countOfResults = json.getInt(COUNT);
+                JSONObject pageDetails = json.getJSONObject(PAGE);
+                Singleton.currentPageNumber = pageDetails.getInt(PAGE);
 				JSONArray results = json.getJSONArray(RESULTS);
 				List<ParliamentBills> bills = new ArrayList<ParliamentBills>();
 				for (int i = 0; i < results.length(); i++) {

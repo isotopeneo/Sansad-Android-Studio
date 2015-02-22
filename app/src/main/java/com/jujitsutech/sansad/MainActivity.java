@@ -2,7 +2,12 @@ package com.jujitsutech.sansad;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.FragmentManager;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
@@ -21,11 +26,14 @@ public class MainActivity extends Activity
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
+    private ProgressDialog progressDialog;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+    private BillsInParliament billsInParliament;
+    private SearchDialog searchDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,10 +64,11 @@ public class MainActivity extends Activity
             default:
                 break;
             case 1:
+                billsInParliament = BillsInParliament.newInstance(this);
                 fragmentManager
                         .beginTransaction()
                         .replace(R.id.container,
-                                BillsInParliament.newInstance()).commit();
+                                billsInParliament).commit();
                 break;
             case 2:
                 fragmentManager
@@ -127,6 +136,40 @@ public class MainActivity extends Activity
      * Bills Parliament fragment
      */
     private void showSearchDialog() {
-        SearchDialog.newInstance().show(getFragmentManager().beginTransaction(), "searchDialog");
+        searchDialog = SearchDialog.newInstance(this);
+        searchDialog.show(getFragmentManager().beginTransaction(), "searchDialog");
+    }
+
+    public void searchForData(String title) {
+        searchDialog.dismiss();
+        if (!title.equals("")) {
+            // Initiate a new search
+            Bundle arg1 = new Bundle();
+            arg1.putString("title", title);
+            billsInParliament.searchBills(arg1);
+        }
+    }
+
+    public void showProgressBar(String message) {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(message);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
+
+    public void dismissProgressBar() {
+        if (null != progressDialog && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
+    }
+
+    public boolean isDeviceConnectedToNetwork() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
+    }
+
+    public void showAlertDialog(String msg) {
+        new AlertDialog.Builder(this).setMessage(msg).show();
     }
 }
