@@ -1,16 +1,14 @@
 package com.jujitsutech.sansad.contenthandler;
 
-import android.os.Bundle;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.jujitsutech.sansad.bean.ParliamentBills;
+import com.jujitsutech.sansad.util.LoggerClass;
+import com.jujitsutech.sansad.util.Singleton;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.jujitsutech.sansad.bean.ParliamentBills;
-import com.jujitsutech.sansad.util.LoggerClass;
-import com.jujitsutech.sansad.util.Singleton;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BillsHandler {
 

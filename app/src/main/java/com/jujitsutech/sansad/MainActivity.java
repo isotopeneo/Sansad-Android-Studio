@@ -60,7 +60,7 @@ public class MainActivity extends Activity
                 fragmentManager
                         .beginTransaction()
                         .replace(R.id.container,
-                                Headlines.newInstance()).commit();
+                                Headlines.newInstance(this)).commit();
             default:
                 break;
             case 1:

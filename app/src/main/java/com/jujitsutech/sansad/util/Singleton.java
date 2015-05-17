@@ -1,5 +1,6 @@
 package com.jujitsutech.sansad.util;
 
+import com.jujitsutech.sansad.bean.Headlines;
 import com.jujitsutech.sansad.bean.ParliamentBills;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 public class Singleton {
 
     public static List<ParliamentBills> data;
+    public static List<Headlines> headlinesList;
 
     public static int countOfResults = 0;
     public static int currentPageNumber = 0;
